@@ -54,15 +54,47 @@ $(document).ready(function () {
 		$("#stats").removeClass("hidden");
 	};
 
-	function resetFilters() {
-		console.log("Filters reset");
+	// Find advanced filters - Round, Player and Set
+	const filters = searchForm.find("#advanced-filters input:disabled");
+
+	// Set filter labels
+	function setFilterLabels(name, value) {
+		searchForm
+			.find(`#advanced-filters label[for="${name}"]`)
+			.text(name.charAt(0).toUpperCase() + name.slice(1) + ": " + value);
 	}
 
+	// Reset filters
+	function resetFilters() {
+		// Reset Round, Player & Set inputs
+		for (let el of filters) {
+			el.disabled = true;
+			if (el.name.includes("comparator") && el.value === "=") {
+				el.checked = true;
+			} else {
+				el.value = $(el).attr("default-value");
+				setFilterLabels(el.name, el.value);
+			}
+		}
+	}
+
+	// Toggle advanced filters
 	searchForm.find('input[name="filters"]').click((e) => {
 		if (!e.target.checked) {
 			resetFilters();
+		} else {
+			for (let el of filters) {
+				el.disabled = false;
+			}
 		}
 	});
+
+	// Change listener for advanced filters
+	for (let el of filters) {
+		$(el).change((e) => {
+			setFilterLabels(e.target.name, e.target.value);
+		});
+	}
 
 	searchForm.submit((e) => {
 		e.preventDefault();

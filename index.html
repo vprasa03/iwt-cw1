@@ -42,9 +42,87 @@
 					</select>
 					<button type="submit">Submit</button>
 				</div>
+
+				<!-- Advanced filters -->
 				<div id="advanced-filters">
 					<label for="filters">Advanced filters</label>
 					<input type="checkbox" name="filters" />
+
+					<div>
+						<label for="round">Round: 1</label>
+						<input
+							type="range"
+							name="round"
+							list="rounds"
+							disabled
+							default-value="1"
+							value="1"
+							min="1"
+							max="7"
+							step="1"
+						/>
+						<span>
+							<label for="=">=</label>
+							<input
+								type="radio"
+								name="range-comparator"
+								value="="
+								default-value="="
+								checked
+								disabled
+							/>
+							<label for=">">></label>
+							<input type="radio" name="range-comparator" value=">" disabled />
+							<label for="<"><</label>
+							<input type="radio" name="range-comparator" value="<" disabled />
+						</span>
+						<datalist id="rounds">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+						</datalist>
+					</div>
+
+					<div>
+						<label for="set">Set: 1</label>
+						<input
+							type="range"
+							name="set"
+							list="sets"
+							disabled
+							default-value="1"
+							value="1"
+							min="1"
+							max="5"
+							step="1"
+						/>
+						<span>
+							<label for="=">=</label>
+							<input
+								type="radio"
+								name="set-comparator"
+								value="="
+								default-value="="
+								checked
+								disabled
+							/>
+							<label for=">">></label>
+							<input type="radio" name="set-comparator" value=">" disabled />
+							<label for="<"><</label>
+							<input type="radio" name="set-comparator" value="<" disabled />
+						</span>
+						<datalist id="sets">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</datalist>
+					</div>
 				</div>
 			</form>
 			<h3 id="data-title"></h3>
