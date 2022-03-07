@@ -12,22 +12,24 @@ function createState() {
 // Execute when document has loaded.
 $(document).ready(function () {
 	const app = $("#app");
+	const searchForm = $("#search-form");
+
+	searchForm[0].reset(); // Reset form
 	app.removeClass("hidden");
 
 	const tableData = createState();
 
 	const updateTable = () => {
-		const tHead = $("#stats > thead");
-		const tBody = $("#stats > tbody");
 		const data = tableData.getState();
+		const stats = $("#stats");
+		stats.addClass("hidden");
 
 		// Update name and year from data
-		if (tHead.children().length > 1) {
-			tHead.children()[0].remove();
-		}
-		tHead.prepend(`<tr><th>${data.name} (${data.year})</th></tr>`);
+		stats.find("#data-title").text(`${data.name} (${data.year})`);
 
 		// Update match data
+		const tBody = stats.find("tbody");
+
 		tBody.empty();
 		tBody.append(
 			data.match.reduce((acc, match, i) => {
@@ -48,10 +50,32 @@ $(document).ready(function () {
 				return acc + output;
 			}, "")
 		);
+
+		$("#stats").removeClass("hidden");
 	};
 
-	$.get("wimbledon-men.json", {}, (data) => {
-		tableData.setState(data);
-		updateTable();
+	function resetFilters() {
+		console.log("Filters reset");
+	}
+
+	searchForm.find('input[name="filters"]').click((e) => {
+		if (!e.target.checked) {
+			resetFilters();
+		}
+	});
+
+	searchForm.submit((e) => {
+		e.preventDefault();
+
+		const filters = $(this).find('input[name="filters"]')[0].checked;
+
+		$.get(
+			$(this).find('select[name="category"] option:selected').val(),
+			{},
+			(data) => {
+				tableData.setState(data);
+				updateTable();
+			}
+		);
 	});
 });

@@ -1,3 +1,11 @@
 .hidden {
 	display: none;
 }
+
+#main-options {
+	width: 100%;
+}
+
+#main-options select[name="category"] {
+	margin: 6px 12px 6px 6px;
+}

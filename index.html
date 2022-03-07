@@ -27,15 +27,33 @@
 	</head>
 	<body>
 		<noscript>You need to enable JavaScript to view this page.</noscript>
-		<script type="text/javascript" src="index.js" defer></script>
 
 		<section id="app" class="hidden">
-			<h2>Wimbledon Data</h2>
+			<h2>Wimbledon Stats</h2>
 			<br />
-			<table id="stats">
+
+			<!-- Search form for match & player data -->
+			<form id="search-form">
+				<div id="main-options">
+					<label for="category">Choose a category</label>
+					<select name="category">
+						<option value="wimbledon-men.json" selected>Men</option>
+						<option value="wimbledon-women.json">Women</option>
+					</select>
+					<button type="submit">Submit</button>
+				</div>
+				<div id="advanced-filters">
+					<label for="filters">Advanced filters</label>
+					<input type="checkbox" name="filters" />
+				</div>
+			</form>
+			<h3 id="data-title"></h3>
+
+			<!-- Table containing match & player data -->
+			<table id="stats" class="hidden">
 				<thead>
 					<tr>
-						<th>Match</th>
+						<th>No.</th>
 						<th>Round</th>
 						<th>Player</th>
 						<th>Set 1</th>
@@ -54,5 +72,6 @@
 			integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 			crossorigin="anonymous"
 		></script>
+		<script type="text/javascript" src="index.js"></script>
 	</body>
 </html>
