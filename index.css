@@ -9,3 +9,20 @@
 #main-options select[name="category"] {
 	margin: 6px 12px 6px 6px;
 }
+
+#advanced-filters div {
+	display: flex;
+	align-items: center;
+	margin-top: 6px;
+}
+
+#advanced-filters div > label {
+	margin-right: 6px;
+	text-align: center;
+}
+
+#advanced-filters div > span {
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	padding: 0 6px;
+}
