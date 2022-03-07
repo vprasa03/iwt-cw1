@@ -2,6 +2,10 @@
 	display: none;
 }
 
+#app > h2 {
+	text-decoration: underline;
+}
+
 #main-options {
 	width: 100%;
 }
