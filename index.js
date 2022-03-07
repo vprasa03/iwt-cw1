@@ -69,8 +69,8 @@ $(document).ready(function () {
 		// Reset Round, Player & Set inputs
 		for (let el of filters) {
 			el.disabled = true;
-			if (el.name.includes("comparator") && el.value === "=") {
-				el.checked = true;
+			if (el.name.includes("comparator")) {
+				if (el.value === "=") el.checked = true;
 			} else {
 				el.value = $(el).attr("default-value");
 				setFilterLabels(el.name, el.value);
@@ -96,15 +96,63 @@ $(document).ready(function () {
 		});
 	}
 
+	function comparatorCondition(comparator, matchVal, paramVal) {
+		switch (comparator) {
+			case "=":
+				return matchVal === paramVal;
+			case "<":
+				return matchVal < paramVal;
+			case ">":
+				return matchVal > paramVal;
+			default:
+				return false;
+		}
+	}
+
+	function filterValidation(match, params) {
+		if (
+			!comparatorCondition(
+				params["round-comparator"],
+				parseInt(match.round),
+				parseInt(params.round)
+			)
+		)
+			return false;
+		if (
+			!comparatorCondition(
+				params["set-comparator"],
+				match.player[0].set.length,
+				parseInt(params.set)
+			)
+		)
+			return false;
+		return true;
+	}
+
+	// Form submit listener
 	searchForm.submit((e) => {
 		e.preventDefault();
 
-		const filters = $(this).find('input[name="filters"]')[0].checked;
+		const filtersEnabled = $(this).find('input[name="filters"]')[0].checked;
 
 		$.get(
 			$(this).find('select[name="category"] option:selected').val(),
 			{},
 			(data) => {
+				if (filtersEnabled) {
+					const filterParams = {};
+					for (let el of filters) {
+						if (el.name.includes("comparator") && !el.checked) {
+						} else {
+							filterParams[el.name] = el.value;
+						}
+					}
+
+					data.match = data.match.filter((matchItem) =>
+						filterValidation(matchItem, filterParams)
+					);
+				}
+
 				tableData.setState(data);
 				updateTable();
 			}
