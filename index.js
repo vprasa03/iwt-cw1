@@ -25,33 +25,40 @@ $(document).ready(function () {
 		stats.addClass("hidden");
 
 		// Update name and year from data
-		stats.find("#data-title").text(`${data.name} (${data.year})`);
+		$("#data-title").text(`${data.name} (${data.year})`);
 
 		// Update match data
 		const tBody = stats.find("tbody");
 
 		tBody.empty();
-		tBody.append(
-			data.match.reduce((acc, match, i) => {
-				let output = "";
-				match.player.forEach((player, j) => {
-					output += `<tr>
-					<td>${j === 0 ? i + 1 : ""}</td>
-					<td>${match.round}</td>
-					<td>${
-						player.outcome === "won"
-							? "<b>" + player.name + "</b>"
-							: player.name
-					}</td>
-					${player.set.map((set) => "<td>" + set + "</td>")}
-				</tr>`;
-				});
 
-				return acc + output;
-			}, "")
-		);
+		if (data.match.length > 0) {
+			$("#no-data").addClass("hidden");
 
-		$("#stats").removeClass("hidden");
+			tBody.append(
+				data.match.reduce((acc, match, i) => {
+					let output = "";
+					match.player.forEach((player, j) => {
+						output += `<tr>
+						<td>${j === 0 ? i + 1 : ""}</td>
+						<td>${match.round}</td>
+						<td>${
+							player.outcome === "won"
+								? "<b>" + player.name + "</b>"
+								: player.name
+						}</td>
+						${player.set.map((set) => "<td>" + set + "</td>")}
+					</tr>`;
+					});
+
+					return acc + output;
+				}, "")
+			);
+
+			$("#stats").removeClass("hidden");
+		} else {
+			$("#no-data").removeClass("hidden");
+		}
 	};
 
 	// Find advanced filters - Round, Player and Set
