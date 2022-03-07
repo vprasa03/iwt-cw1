@@ -1,3 +1,4 @@
 $(document).ready(function () {
-	console.log("Document ready!");
+	const app = $("#app");
+	app.removeClass("hidden");
 });
