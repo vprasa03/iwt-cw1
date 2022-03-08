@@ -122,6 +122,44 @@
 							<option value="5">5</option>
 						</datalist>
 					</div>
+
+					<div>
+						<input
+							id="player-input"
+							placeholder="Type a player's name"
+							list="players-list"
+							name="player"
+							value=""
+							default-value=""
+							disabled
+						/>
+						<datalist id="players-list"></datalist>
+						<span>
+							<label for="equals">equals</label>
+							<input
+								type="radio"
+								name="player-comparator"
+								value="equals"
+								default-value="equals"
+								checked
+								disabled
+							/>
+							<label for="contains">contains</label>
+							<input
+								type="radio"
+								name="player-comparator"
+								value="contains"
+								disabled
+							/>
+							<label for="none">none</label>
+							<input
+								type="radio"
+								name="player-comparator"
+								value="none"
+								disabled
+							/>
+						</span>
+					</div>
 				</div>
 			</form>
 

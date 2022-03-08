@@ -77,7 +77,7 @@ $(document).ready(function () {
 		for (let el of filters) {
 			el.disabled = true;
 			if (el.name.includes("comparator")) {
-				if (el.value === "=") el.checked = true;
+				if (el.value === "=" || el.value === "equals") el.checked = true;
 			} else {
 				el.value = $(el).attr("default-value");
 				setFilterLabels(el.name, el.value);
@@ -103,6 +103,7 @@ $(document).ready(function () {
 		});
 	}
 
+	// Compare and filter match data
 	function comparatorCondition(comparator, matchVal, paramVal) {
 		switch (comparator) {
 			case "=":
@@ -111,12 +112,18 @@ $(document).ready(function () {
 				return matchVal < paramVal;
 			case ">":
 				return matchVal > paramVal;
+			case "equals":
+				return matchVal.toLowerCase() === paramVal.toLowerCase();
+			case "contains":
+				return matchVal.toLowerCase().includes(paramVal.toLowerCase());
+			case "none":
+				return true;
 			default:
 				return false;
 		}
 	}
 
-	function filterValidation(match, params) {
+	function filterData(match, params) {
 		if (
 			!comparatorCondition(
 				params["round-comparator"],
@@ -133,8 +140,44 @@ $(document).ready(function () {
 			)
 		)
 			return false;
+		if (
+			!comparatorCondition(
+				params["player-comparator"],
+				match.player[0].name,
+				params.player
+			) &&
+			!comparatorCondition(
+				params["player-comparator"],
+				match.player[1].name,
+				params.player
+			)
+		)
+			return false;
 		return true;
 	}
+
+	// Suggestions for player name input
+	searchForm.find("#player-input").focusin((e) => {
+		e.preventDefault();
+		$.get(
+			$(this).find('select[name="category"] option:selected').val(),
+			{},
+			(data) => {
+				const playerDatalist = searchForm.find("#players-list");
+				const playerNames = new Set();
+
+				playerDatalist.empty();
+
+				data.match.forEach((match) => {
+					playerNames.add(match.player[0].name).add(match.player[1].name);
+				});
+
+				playerNames.forEach((name) =>
+					playerDatalist.append(`<option value="${name}"/>`)
+				);
+			}
+		);
+	});
 
 	// Form submit listener
 	searchForm.submit((e) => {
@@ -156,7 +199,7 @@ $(document).ready(function () {
 					}
 
 					data.match = data.match.filter((matchItem) =>
-						filterValidation(matchItem, filterParams)
+						filterData(matchItem, filterParams)
 					);
 				}
 
