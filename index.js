@@ -15,6 +15,9 @@ $(document).ready(function () {
 	const searchForm = $("#search-form");
 
 	searchForm[0].reset(); // Reset form
+	for (let el of searchForm.find("#advanced-filters input")) {
+		if (el.name !== "filters") el.disabled = true;
+	}
 	app.removeClass("hidden");
 
 	const tableData = createState();
