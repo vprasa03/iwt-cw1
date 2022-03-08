@@ -17,10 +17,12 @@ $(document).ready(function () {
 	const app = $("#app");
 	const searchForm = $("#search-form");
 
-	searchForm[0].reset(); // Reset form
+	// Reset form
+	searchForm[0].reset();
 	for (let el of searchForm.find("#advanced-filters input")) {
 		if (el.name !== "filters") el.disabled = true;
 	}
+
 	app.removeClass("hidden");
 
 	const tableData = createState();
@@ -30,10 +32,10 @@ $(document).ready(function () {
 		const stats = $("#stats");
 		stats.addClass("hidden");
 
-		// Update name and year from data
+		// Update name and year in heading
 		$("#data-title").text(`${data.name} (${data.year})`);
 
-		// Update match data
+		// Update match data in table body
 		const tBody = stats.find("tbody");
 
 		tBody.empty();
@@ -102,7 +104,7 @@ $(document).ready(function () {
 		}
 	});
 
-	// Change listener for advanced filters
+	// onChange listener for advanced filters - displays current value on page
 	for (let el of filters) {
 		$(el).change((e) => {
 			setFilterLabels(e.target.name, e.target.value);
@@ -166,6 +168,7 @@ $(document).ready(function () {
 	searchForm.find("#player-input").focusin((e) => {
 		e.preventDefault();
 		try {
+			// Fetch player names
 			$.get(
 				$(this).find('select[name="category"] option:selected').val(),
 				{},
@@ -196,6 +199,7 @@ $(document).ready(function () {
 		try {
 			const filtersEnabled = $(this).find('input[name="filters"]')[0].checked;
 
+			// Fetch data
 			$.get(
 				$(this).find('select[name="category"] option:selected').val(),
 				{},
@@ -214,6 +218,7 @@ $(document).ready(function () {
 						);
 					}
 
+					// Set data and update table contents
 					tableData.setState(data);
 					updateTable();
 				}
