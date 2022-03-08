@@ -1,3 +1,6 @@
+// Internet and Web Technologies Coursework-1
+// Submitted by Vignesh Prasad (13717879)
+
 // Create closure for global state.
 function createState() {
 	let state = {};
@@ -162,53 +165,61 @@ $(document).ready(function () {
 	// Suggestions for player name input
 	searchForm.find("#player-input").focusin((e) => {
 		e.preventDefault();
-		$.get(
-			$(this).find('select[name="category"] option:selected').val(),
-			{},
-			(data) => {
-				const playerDatalist = searchForm.find("#players-list");
-				const playerNames = new Set();
+		try {
+			$.get(
+				$(this).find('select[name="category"] option:selected').val(),
+				{},
+				(data) => {
+					const playerDatalist = searchForm.find("#players-list");
+					const playerNames = new Set();
 
-				playerDatalist.empty();
+					playerDatalist.empty();
 
-				data.match.forEach((match) => {
-					playerNames.add(match.player[0].name).add(match.player[1].name);
-				});
+					data.match.forEach((match) => {
+						playerNames.add(match.player[0].name).add(match.player[1].name);
+					});
 
-				playerNames.forEach((name) =>
-					playerDatalist.append(`<option value="${name}"/>`)
-				);
-			}
-		);
+					playerNames.forEach((name) =>
+						playerDatalist.append(`<option value="${name}"/>`)
+					);
+				}
+			);
+		} catch (error) {
+			console.log("Message: ", error);
+		}
 	});
 
 	// Form submit listener
 	searchForm.submit((e) => {
 		e.preventDefault();
 
-		const filtersEnabled = $(this).find('input[name="filters"]')[0].checked;
+		try {
+			const filtersEnabled = $(this).find('input[name="filters"]')[0].checked;
 
-		$.get(
-			$(this).find('select[name="category"] option:selected').val(),
-			{},
-			(data) => {
-				if (filtersEnabled) {
-					const filterParams = {};
-					for (let el of filters) {
-						if (el.name.includes("comparator") && !el.checked) {
-						} else {
-							filterParams[el.name] = el.value;
+			$.get(
+				$(this).find('select[name="category"] option:selected').val(),
+				{},
+				(data) => {
+					if (filtersEnabled) {
+						const filterParams = {};
+						for (let el of filters) {
+							if (el.name.includes("comparator") && !el.checked) {
+							} else {
+								filterParams[el.name] = el.value;
+							}
 						}
+
+						data.match = data.match.filter((matchItem) =>
+							filterData(matchItem, filterParams)
+						);
 					}
 
-					data.match = data.match.filter((matchItem) =>
-						filterData(matchItem, filterParams)
-					);
+					tableData.setState(data);
+					updateTable();
 				}
-
-				tableData.setState(data);
-				updateTable();
-			}
-		);
+			);
+		} catch (error) {
+			console.log("Message: ", error);
+		}
 	});
 });
